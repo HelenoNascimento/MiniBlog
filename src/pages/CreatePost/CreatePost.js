@@ -44,7 +44,7 @@ const handleSubmit = (e) => {
         title,
         image,
         body,
-        tags,
+        tagsArray,
         uid: user.uid,
         createdBy: user.displayName
     })
