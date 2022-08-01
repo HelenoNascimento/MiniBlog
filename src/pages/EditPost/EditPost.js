@@ -1,22 +1,36 @@
 
 //css
-import styles from './CreatePost.module.css';
+import styles from './EditPost.module.css';
 
-import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuthValue } from '../../context/AuthContext';
-import { useInsertDocument } from '../../hooks/useInsertDocument';
+import { useFetchDocument } from '../../hooks/UseFetchDocument'; 
+import { useUpdateDocument } from '../../hooks/useUpdateDocument';
 
-const CreatePost = () => {
-const [ title, setTitle] = useState("");
-const [ image, setImage] = useState("");
-const [ body, setBody] = useState("");
-const [  tags, setTags] = useState("");
-const [ formError, setFormError] = useState("");
+const EditPost = () => {
+    const {id} = useParams();
+    const {document: post} = useFetchDocument("posts", id)
 
-const { insertDocument, response} = useInsertDocument("posts");
-const{ user } = useAuthValue();
-const navigate= useNavigate();
+    const [ title, setTitle] = useState("");
+    const [ image, setImage] = useState("");
+    const [ body, setBody] = useState("");
+    const [  tags, setTags] = useState("");
+    const [ formError, setFormError] = useState("");
+
+    useEffect(() =>{
+        if(post){
+            setTitle(post.title);
+            setBody(post.body);
+            setImage(post.image);
+            const textTags = post.tagsArray.join(", ");
+            setTags(textTags);
+        }
+    },[post])
+
+    const { updateDocument, response} = useUpdateDocument("posts");
+    const{ user } = useAuthValue();
+    const navigate= useNavigate();
 
 const handleSubmit = (e) => {
     e.preventDefault();
@@ -40,24 +54,29 @@ const handleSubmit = (e) => {
 
     if(formError) return;
 
-    insertDocument({
+    const data = {
         title,
         image,
         body,
         tagsArray,
         uid: user.uid,
         createdBy: user.displayName
-    })
+    }
 
-    //redirect to home page
-    navigate("/");
+    updateDocument(id,data)
+
+    //redirect to dashboard
+    navigate("/dashboard");
 };
 
   return (
-    <div className={styles.create_post}>
-        <h2>Criar  post</h2>
-        <p>Escreva sobre o que quiser e compartilhe seu conhecimento</p>
-        <form onSubmit={handleSubmit} >
+    <div className={styles.edit_post}>
+       
+            {post &&(
+                <>
+                 <h2>Editando post: {post.title}</h2>
+                 <p>Altere os dados do post, como desejar</p>
+                <form onSubmit={handleSubmit} >
             <label>
                 <span>Titulo: </span>
                 <input 
@@ -69,6 +88,7 @@ const handleSubmit = (e) => {
                 value={title}
                 />
             </label>
+
             <label>
                 <span>URL da imagem: </span>
                 <input 
@@ -80,6 +100,8 @@ const handleSubmit = (e) => {
                 value={image}
                 />
             </label>
+           <p className={styles.preview_title}>preview da imagem atual: </p> 
+           <img className={styles.image_preview} src={post.image} alt={post.title}/>
             <label>
                 <span>Conteudo:  </span>
                 <textarea vame="body" 
@@ -102,13 +124,15 @@ const handleSubmit = (e) => {
             </label>
            
            
-            {!response.loading && <button className="btn">Cadastrar </button>}
+            {!response.loading && <button className="btn">Editar </button>}
             {response.loading && <button className="btn" disabled>Aguarde... </button>}
             {response.error && <p className="error">{response.error}</p>}
             {formError&& <p className="error">{formError}</p>}
         </form>
+                </>
+            )}
     </div>
   )
 }
 
-export default CreatePost
+export default EditPost
