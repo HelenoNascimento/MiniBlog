@@ -22,7 +22,7 @@ nav button{
   border: none;
   color: #000;
   transition: .4s;
-  font-size: 1.4em;
+  font-size: 1.2em;
   cursor: pointer;
   font-family: "Montserrat", sans-serif;
   
@@ -102,3 +102,38 @@ button[disabled]{
   padding: 5px;
   border-radius: 5px;
 }
+
+@media (max-width: 999px){
+    a,
+    nav button{
+      font-size: 1.2em;
+    }
+}
+@media (max-width: 850px){
+ h1{
+  font-size: 1.7em;
+ }
+  form{
+  max-width: 60%;
+  margin: 0 auto;
+}
+}
+
+@media (max-width: 600px){
+  h1{
+    font-size: 1.5em;
+   }
+      a,
+      nav button{
+        font-size: 1em;
+      }
+  }
+  @media (max-width: 480px){
+    h1{
+      font-size: 1.2em;
+     }
+        a,
+        nav button{
+          font-size: 1em;
+        }
+    }

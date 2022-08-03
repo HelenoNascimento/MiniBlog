@@ -27,3 +27,15 @@
 .noposts a{
     padding: 10px 25px;
 }
+
+@media (max-width: 850px){
+    .search_form{
+        max-width: 100%;
+        width: 80%;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 2em;
+    }
+  
+   
+}

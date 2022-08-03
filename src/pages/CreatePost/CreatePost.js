@@ -101,11 +101,16 @@ const handleSubmit = (e) => {
                 />
             </label>
            
+           <div className={styles.buttons}>
+
            
             {!response.loading && <button className="btn">Cadastrar </button>}
             {response.loading && <button className="btn" disabled>Aguarde... </button>}
             {response.error && <p className="error">{response.error}</p>}
             {formError&& <p className="error">{formError}</p>}
+            <a href='https://pixabay.com/pt/images/search/trilha/' target="_blank" className='btn btn-outline'>Banco de imagem</a>
+            
+            </div>
         </form>
     </div>
   )

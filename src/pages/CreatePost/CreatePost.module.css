@@ -9,3 +9,8 @@
     color: #aaa;
     margin-bottom: 2em;
 }
+.buttons{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
